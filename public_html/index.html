@@ -115,19 +115,37 @@ and open the template in the editor.
             $( this ).load(function() {
                 
                 var twitter = authorizeAndInitializeService().twitter;
-                var twitterService = authorizeAndInitializeService().twitterService;
+                var googlePlus = authorizeAndInitializeService().google_plus;
                 
                 if(twitter !== false){
+                    var twitterService = authorizeAndInitializeService().twitterService;
                     twitter.me().done(function(data) {
                         twitterService.getUserDirectMessages(data["id"]);
                         twitterService.getUserMentions(data["id"]);
                         twitterService.getUserTweets(data["id"]);
                         window.setTimeout(function () {
-                             window.location.href = "mainPage3.html";
+                             window.location.href = "mainPage.html";
                          }, 1000);
                     }).fail(function(err){
                         console.log(err);
                     });
+                } else {
+                    
+                    if( googlePlus !== false){
+                        googlePlus.me().done(function(data) {
+                        //console.log(data);
+                        window.location.href = "mainPage.html";
+//                        twitterService.getUserDirectMessages(data["id"]);
+//                        twitterService.getUserMentions(data["id"]);
+//                        twitterService.getUserTweets(data["id"]);
+//                        window.setTimeout(function () {
+//                             window.location.href = "mainPage3.html";
+//                         }, 1000);
+                    }).fail(function(err){
+                        console.log(err);
+                    });
+                    }
+                    
                 }
       
             });
@@ -138,6 +156,14 @@ and open the template in the editor.
                 localStorage.putObjectInLocalStorage('loginDateTime',getCurrentDateTime());
                 console.log(" login " + getCurrentDateTime());
             });
+            
+            $( "#google-button" ).click(function() {
+                var googleService = authorizeAndInitializeService().googleService;
+                googleService.loginGoogle();
+                localStorage.putObjectInLocalStorage('loginDateTime',getCurrentDateTime());
+            });
+            
+            
 
     </script>
 </html>

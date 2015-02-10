@@ -51,14 +51,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html"> <img class="logo" src="images/logo.png" alt="meetie"> </a>
+                    <a class="navbar-brand" href="mainPage.html"> <img class="logo" src="images/logo.png" alt="meetie"> </a>
                 </div>
                 <!-- Top Menu Items -->
                 <ul class="nav navbar-right top-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
-                        <ul class="dropdown-menu message-dropdown">
-                            <li class="message-preview">
+                    <li class="dropdown"> 
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="directMessagesIcon"><i class="fa fa-envelope"></i> <span id="circle" class="badge bg-theme"></span><b class="caret"></b></a>
+                        <ul class="dropdown-menu message-dropdown" id="directMessages">
+<!--                            <li class="message-preview">
                                 <a href="#">
                                     <div class="media">
                                         <span class="pull-left">
@@ -95,7 +95,7 @@
                                             <img class="media-object" src="http://placehold.it/50x50" alt="">
                                         </span>
                                         <div class="media-body">
-                                            <h5 class="media-heading"><strong>John Smith</strong>
+                                            <h5 class="media-heading" ><strong>John Doe</strong>
                                             </h5>
                                             <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                             <p>Lorem ipsum dolor sit amet, consectetur...</p>
@@ -105,7 +105,7 @@
                             </li>
                             <li class="message-footer">
                                 <a href="#">Read All New Messages</a>
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -136,7 +136,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="username"><i class="fa fa-user"></i></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -161,7 +161,7 @@
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">
                         <li class="active">
-                            <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                            <a href="mainPage.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                         </li>
                     </ul>
                 </div>
@@ -260,19 +260,16 @@
             <!-- /#page-wrapper -->
 
         </div>
-        <!-- /#wrapper -->
-        <div id="div1">
-            <p> About me </p>
-            <p id="name"> My name is  </p>
+        <!--#wrapper--> 
+<!--        <div id="div1">
             <p id="directMessages"> DirectMessages  </p>
-            <p id="tweets"> Tweets  </p>
             <p id="mentions"> Mentions  </p>
             <img id="image" src="" alt="My image">
-        </div>
+        </div>-->
 
 
         <!-- Bootstrap Core JavaScript -->
-        
+
         <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
@@ -289,44 +286,6 @@
         <script src="js/plugins/morris/raphael.min.js"></script>
         <script src="js/plugins/morris/morris.min.js"></script>
         <script src="js/plugins/morris/morris-data.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                localStorage.putObjectInLocalStorage('timeIOpenedBrowser', getCurrentDateTime());
-                var friendsList = localStorage.getObjectGromLocalStorage('friendsList');
-                var followersList = localStorage.getObjectGromLocalStorage('followersList');
-                var loggedUser = localStorage.getObjectGromLocalStorage('loggedinUser');
-
-                parseList(friendsList);
-                parseList(followersList);
-
-                var user = initializeUser(loggedUser["id"], loggedUser["screen_name"],
-                        loggedUser["name"], loggedUser["alias"],
-                        loggedUser["avatar"], friendsList, followersList);
-
-                $("#name").append(user.getScreenName());
-                $("#image").attr("src", user.getPicture());
-
-                var twitterService = authorizeAndInitializeService().twitterService;
-                prepareTweets(twitterService);
-                notifyDirectMessages(loggedUser);
-
-                window.setTimeout(function () {
-                    notifyMentions();
-                }, 1000);
-
-            });
-
-            $("#logoutButton").click(function (ev) {
-                ev.preventDefault();
-                var twitterService = authorizeAndInitializeService().twitterService;
-                twitterService.logoutTwitter();
-            });
-
-            $(window).unload(function () {
-                localStorage.putObjectInLocalStorage('closeTab', getCurrentDateTime());
-            });
-        </script>
-
     </body>
 
 </html>

@@ -17,9 +17,54 @@ var meetie = {
             this.oauthResult = oauthResult;
 
         }
+    },
+    GooglePlusServiceModel: {
+        GoogleService: function (oauthResult) {
+            this.oauthResult = oauthResult;
+        }
     }
 
 };
+
+meetie.GooglePlusServiceModel.GoogleService.prototype = {
+    getOauthResult: function () {
+        return this.oauthResult;
+    },
+    loginGoogle: function(){
+        OAuth.popup('google_plus', {cache: true}).done(function (googlePlus) {
+            googlePlus.me().done(function (data) {
+                console.log(data);
+                window.location.href = "mainPage.html";
+//                localStorage.putObjectInLocalStorage('loggedinUser', data);
+//                twitterService = authorizeAndInitializeService().twitterService;
+//                twitterService.friendsList(data["id"]);
+//                twitterService.followersList(data["id"]);
+//
+//                console.log(data);
+//                twitterService.getUserMentions(data["id"]);
+//                twitterService.getUserDirectMessages(data["id"]);
+//                twitterService.getUserTweets(data["id"]);
+//
+//                window.setTimeout(function () {
+//                     window.location.href = "mainPage3.html";
+//                }, 1000);
+            }).fail(function (err) {
+                console.log(err);
+            });
+
+        }).fail(function () {
+            alert("Google authentication failed. Cannot provide results from Google. Please try again.");
+        });
+    },
+    logoutGoogle: function(){
+        OAuth.clearCache('google_plus');
+        localStorage.clear();
+        localStorage.putObjectInLocalStorage('lastLogout', getCurrentDateTime());
+        window.location.href = "index.html"; 
+    }
+
+};
+
 
 meetie.UserModel.User.prototype = {
     getId: function () {
@@ -152,13 +197,12 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
                 twitterService.friendsList(data["id"]);
                 twitterService.followersList(data["id"]);
 
-                console.log(data);
                 twitterService.getUserMentions(data["id"]);
                 twitterService.getUserDirectMessages(data["id"]);
                 twitterService.getUserTweets(data["id"]);
 
                 window.setTimeout(function () {
-                     window.location.href = "mainPage3.html";
+                     window.location.href = "mainPage.html";
                 }, 1000);
             }).fail(function (err) {
                 console.log(err);
@@ -185,7 +229,9 @@ Storage.prototype.getObjectGromLocalStorage = function (key) {
 function authorizeAndInitializeService() {
     OAuth.initialize('NxfQddkW2whsh0-6HcSso1UvVYw');
     var twitter = OAuth.create('twitter');
-    return {'twitter': twitter, 'twitterService': new meetie.TwitterServiceModel.TwitterService(twitter)};
+    var googlePlus = OAuth.create('google_plus');
+    return {'twitter': twitter, 'twitterService': new meetie.TwitterServiceModel.TwitterService(twitter),
+            'google_plus': googlePlus,  'googleService': new meetie.GooglePlusServiceModel.GoogleService(googlePlus)};
 }
 
 function parseList(list) {
