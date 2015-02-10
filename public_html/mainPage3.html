@@ -10,37 +10,37 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style type="text/css">
-        body { font-size: 16pt; }
-        .container { width: 960px; margin-left: auto; margin-right: auto; }
-        form { border: #cccccc 1px solid; padding: 20px; margin-bottom: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
-        .form-element { margin-bottom: 10px; }
-        #refresh-btn { margin-bottom: 20px; }
-        .comment { padding: 10px; margin-bottom: 10px; border-bottom: #cccccc 1px solid; }
-        .comment .links { float: right; }
-        .comment .links a { margin-left: 10px; }
-        .comment .author { font-style: italic; }
-    </style>
+            body { font-size: 16pt; }
+            .container { width: 960px; margin-left: auto; margin-right: auto; }
+            form { border: #cccccc 1px solid; padding: 20px; margin-bottom: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+            .form-element { margin-bottom: 10px; }
+            #refresh-btn { margin-bottom: 20px; }
+            .comment { padding: 10px; margin-bottom: 10px; border-bottom: #cccccc 1px solid; }
+            .comment .links { float: right; }
+            .comment .links a { margin-left: 10px; }
+            .comment .author { font-style: italic; }
+        </style>
     </head>
     <body>
         <div class="container">
 
-        <ul>
-            <li><a href="compose.html">Compose</a></li> 
-            <li><a href="host.html">Host</a></li> 
-            <li><a href="invites.html">Invites</a></li> 
-        </ul>
-         <div id="meetings">
+            <ul>
+                <li><a href="compose.html">Compose</a></li> 
+                <li><a href="host.html">Host</a></li> 
+                <li><a href="invites.html">Invites</a></li> 
+            </ul>
+            <div id="meetings">
+            </div>
         </div>
-    </div>
 
         <input type="date" id="calendar" onchange="Controller.sortMeetings()"/>
         <div id="div1">
-        <p> About me </p>
-        <p id="name"> My name is  </p>
-        <p id="directMessages"> DirectMessages  </p>
-        <p id="tweets"> Tweets  </p>
-        <p id="mentions"> Mentions  </p>
-        <img id="image" src="" alt="My image">
+            <p> About me </p>
+            <p id="name"> My name is  </p>
+            <p id="directMessages"> DirectMessages  </p>
+            <p id="tweets"> Tweets  </p>
+            <p id="mentions"> Mentions  </p>
+            <img id="image" src="" alt="My image">
         </div>
         <button id="logoutButton">  Logout </button>  
         <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -50,42 +50,47 @@ and open the template in the editor.
         <script src="js/script.js" type="text/javascript"></script>
         <script src="js/mainPage.js" type="text/javascript"></script>
         <script src="js/alertify.js" type="text/javascript"></script>
-        <script type="text/javascript"> 
-            $( document ).ready(function() {
-                localStorage.putObjectInLocalStorage('timeIOpenedBrowser',getCurrentDateTime());
-                var friendsList = localStorage.getObjectGromLocalStorage('friendsList');
-                var followersList = localStorage.getObjectGromLocalStorage('followersList');
-                var loggedUser = localStorage.getObjectGromLocalStorage('loggedinUser');
-     
-                parseList(friendsList);
-                parseList(followersList);
-                
-                var user = initializeUser(loggedUser["id"],loggedUser["screen_name"],
-                                         loggedUser["name"],loggedUser["alias"], 
-                                         loggedUser["avatar"], friendsList, followersList); 
-    
-                $("#name").append(user.getScreenName());
-                $("#image").attr("src", user.getPicture());
-                
-                var twitterService = authorizeAndInitializeService().twitterService;
-                prepareTweets(twitterService);
-                notifyDirectMessages(loggedUser);
-      
-                window.setTimeout(function () {                        
-                      notifyMentions();                       
-                }, 1000);
+        <script type="text/javascript">
+            $(document).ready(function () {
+                localStorage.putObjectInLocalStorage('timeIOpenedBrowser', getCurrentDateTime());
+
+                window.setTimeout(function () {
+                    var friendsList = localStorage.getObjectGromLocalStorage('friendsList');
+                    var followersList = localStorage.getObjectGromLocalStorage('followersList');
+                    var loggedUser = localStorage.getObjectGromLocalStorage('loggedinUser');
+
+                    parseList(friendsList);
+                    parseList(followersList);
+
+                    var user = initializeUser(loggedUser["id"], loggedUser["screen_name"],
+                            loggedUser["name"], loggedUser["alias"],
+                            loggedUser["avatar"], friendsList, followersList);
+
+                    $("#name").append(user.getScreenName());
+                    $("#image").attr("src", user.getPicture());
+
+                    var twitterService = authorizeAndInitializeService().twitterService;
+                    prepareTweets(twitterService);
+                    notifyDirectMessages(loggedUser);
+
+                    window.setTimeout(function () {
+                        notifyMentions();
+                    }, 2000);
+                }, 2000);
+
 
             });
-          
-            $( "#logoutButton" ).click(function() {
+            setUpdateInterval(notifyDirectMessagesOnline, localStorage.getObjectGromLocalStorage('loggedinUser'), prepareTweetsOnline,
+                    authorizeAndInitializeService().twitterService, notifyMentionsOnline);
+            $("#logoutButton").click(function () {
                 var twitterService = authorizeAndInitializeService().twitterService;
                 twitterService.logoutTwitter();
-            });            
-  
-            $( window ).unload(function() {
-                localStorage.putObjectInLocalStorage('closeTab',getCurrentDateTime());
-            });    
+            });
+
+            $(window).unload(function () {
+                localStorage.putObjectInLocalStorage('closeTab', getCurrentDateTime());
+            });
         </script>
-        
+
     </body>
 </html>
