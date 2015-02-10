@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        
+         <title> Login</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Dashboard">
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/style-responsive.css" rel="stylesheet">
+    
+    </head>
+    <body id="login-page">
+        <div>
+
+	  	<div class="container">
+
+	  	
+
+		      <form class="form-login" action="index.html">
+
+		        <h2 class="form-login-heading"> <img src="images/logo.png"> </h2>
+
+		        <div class="login-wrap">
+
+		            <h4> Meetie is an application designer for people how like to have an order in their meetings...</h4>
+
+		            <hr>
+
+		            
+
+		            <div class="login-social-link centered">
+
+		            <p>Sign in via your social network</p>
+		               
+                                <img height="50" id="twitter-button" src="images/twitter-button.png" alt=""/>
+
+		            </div>
+
+		
+
+		        </div>
+
+		
+
+		          <!-- Modal -->
+
+		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+
+		              <div class="modal-dialog">
+
+		                  <div class="modal-content">
+
+		                      <div class="modal-header">
+
+		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+		                          <h4 class="modal-title">Forgot Password ?</h4>
+
+		                      </div>
+
+		                      <div class="modal-body">
+
+		                          <p>Enter your e-mail address below to reset your password.</p>
+
+		                          <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+
+		
+
+		                      </div>
+
+		                      <div class="modal-footer">
+
+		                          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+
+		                          <button class="btn btn-theme" type="button">Submit</button>
+
+		                      </div>
+
+		                  </div>
+
+		              </div>
+
+		          </div>
+
+		          <!-- modal -->
+
+		
+
+		      </form>	  	
+
+	  	
+
+	  	</div>
+
+	  </div>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/oauth.js" type="text/javascript"></script>
+    <script src="js/meetie.js" type="text/javascript"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+               
+            $( this ).load(function() {
+                
+                var twitter = authorizeAndInitializeService().twitter;
+                var twitterService = authorizeAndInitializeService().twitterService;
+                
+                if(twitter !== false){
+                    twitter.me().done(function(data) {
+                        twitterService.getUserDirectMessages(data["id"]);
+                        twitterService.getUserMentions(data["id"]);
+                        twitterService.getUserTweets(data["id"]);
+                        window.setTimeout(function () {
+                             window.location.href = "mainPage.html";
+                         }, 1000);
+                    }).fail(function(err){
+                        console.log(err);
+                    });
+                }
+      
+            });
+            
+            $( "#twitter-button" ).click(function() {
+                var twitterService = authorizeAndInitializeService().twitterService;
+                twitterService.twitterLogin();
+                localStorage.putObjectInLocalStorage('loginDateTime',getCurrentDateTime());
+                console.log(" login " + getCurrentDateTime());
+            });
+
+    </script>
+</html>

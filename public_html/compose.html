@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compose</title>
+    <style type="text/css">
+        body { font-size: 16pt; }
+        .container { width: 960px; margin-left: auto; margin-right: auto; }
+        form { border: #cccccc 1px solid; padding: 20px; margin-bottom: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+        .form-element { margin-bottom: 10px; }
+        #refresh-btn { margin-bottom: 20px; }
+        .comment { padding: 10px; margin-bottom: 10px; border-bottom: #cccccc 1px solid; }
+        .comment .links { float: right; }
+        .comment .links a { margin-left: 10px; }
+        .comment .author { font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+         <ul>
+           
+            <li><a href="index.html">Home</a></li> 
+            <li><a href="host.html">Host</a></li> 
+            <li><a href="invites.html">Invites</a></li> 
+            <li><a href="compose.html">Compose</a></li>
+        </ul>
+
+
+        <div id="meetings">
+        </div>
+        <form id="comment-form" onsubmit="Controller.Compose.sendData(); return false;">
+            <div class="form-element">
+                <label for="name">Name: </label>
+                <input type="text" id="title" name="name" />
+            </div>
+            <div class="form-element">
+                 <label for="comment">Description: </label>
+                <textarea id="description" name="comment" rows="5" cols="50">
+                </textarea>
+            </div>
+            <div class="form-element">
+                <label for="name">Location: </label>
+                <input type="text" id="location" name="name" />
+            </div>
+            <div class="form-element">
+                <label for="name">Date: </label>
+                <input type="date" id="date_d" name="name" />
+                <input type="time" id="date_t" />
+                <button type="button" id="AddDate" onclick="Controller.Compose.addDate(); return false;">Add</button>
+                <span id="dates"></span>
+            </div>
+             <div class="form-element">
+                <label for="name">Name: </label>
+                <input type="text" id="inp_guests" name="name" />
+                 <button type="button" id="AddGuest" onclick="Controller.Compose.addGuest(); return false;">Add</button>
+                 <span id="guests"></span>
+            </div>
+            <div class="form-element">
+                <button type="submit">Add New Comment</button>
+            </div>
+        </form>
+    </div>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="js/script.js" type="text/javascript"></script>
+</body>
+</html>
