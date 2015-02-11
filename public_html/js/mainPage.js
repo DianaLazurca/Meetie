@@ -21,10 +21,12 @@ $(document).ready(function () {
 
             $("#image").attr("src", user.getPicture());
             var twitterService = authorizeAndInitializeService().twitterService;
+            twitterService.getUserDirectMessages(loggedUser["id"]);
             prepareTweets(twitterService);
-            notifyDirectMessages(loggedUser);
+            
             window.setTimeout(function () {
                 notifyMentions();
+                notifyDirectMessages(loggedUser);
             }, 2000);
         }, 2000);
         setUpdateInterval(notifyDirectMessagesOnline, localStorage.getObjectGromLocalStorage('loggedinUser'), prepareTweetsOnline,
@@ -38,14 +40,15 @@ $(document).ready(function () {
     $("#directMessagesIcon").click(function (ev) {
         ev.preventDefault();
 
-        var directMessages = localStorage.getObjectGromLocalStorage('directMessagesList');
-        var newMessages = localStorage.getObjectGromLocalStorage('directMessagesListGreater');
+//        var directMessages = localStorage.getObjectGromLocalStorage('directMessagesList');
+//        var newMessages = localStorage.getObjectGromLocalStorage('directMessagesListGreater');
+        localStorage.putObjectInLocalStorage('lastSeen', getCurrentDateTime());
         $("#circle").text("");
-        if (newMessages !== null && newMessages.length !== 0) {
-            localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', newMessages[0]["id"]);
-        } else if (directMessages !== null && directMessages.length !== 0) {
-            localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', directMessages[0]["id"]);
-        }
+//        if (newMessages !== null && newMessages.length !== 0) {
+//            localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', newMessages[0]["id"]);
+//        } else if (directMessages !== null && directMessages.length !== 0) {
+//            localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', directMessages[0]["id"]);
+//        }
     });
 });
 $("#logoutButton").click(function () {
@@ -69,10 +72,15 @@ function notifyDirectMessages(loggedUser) {
     var directMessages = localStorage.getObjectGromLocalStorage('directMessagesList');
     var lastLogout = localStorage.getObjectGromLocalStorage('lastLogout');
     var lastUnloadPage = localStorage.getObjectGromLocalStorage('closeTab');
+    var lastSeen = localStorage.getObjectGromLocalStorage('lastSeen');
     var logoutDate = new Date(lastLogout);
     var closeTabDate = new Date(lastUnloadPage);
+    var lastSeenDate = new Date(lastSeen);
+    
     var lastOut = logoutDate.getTime() < closeTabDate.getTime() ? closeTabDate : logoutDate;
-
+    lastOut = lastOut.getTime() < lastSeenDate.getTime() ? lastOut : lastSeenDate;
+    //asta face ce am zis jshcsjknkcjbvkjsb
+    
     if (directMessages !== null && directMessages.length !== 0) {
         localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', directMessages[0]["id"]);
         for (var i = directMessages.length - 1; i >= 0; i--) {
@@ -86,6 +94,7 @@ function notifyDirectMessages(loggedUser) {
                         var b = nr + 1;
                         $("#circle").text(b);
                     }
+                    localStorage.putObjectInLocalStorage('lastDownloadedMessage', directMessages[i]["id"]);
                 }
             }
         }
@@ -127,7 +136,7 @@ function getRenderedMessage(directMessage) {
 }
 
 function notifyDirectMessagesOnline(loggedUser) {
-    var lastMessageID = localStorage.getObjectGromLocalStorage('lastMessageSeenOnApp');
+    var lastMessageID = localStorage.getObjectGromLocalStorage('lastDownloadedMessage');
     console.log("last papapapa " + lastMessageID);
     var twitterService = authorizeAndInitializeService().twitterService;
     twitterService.getUserDirectMessagesGreaterThanId(lastMessageID);
@@ -137,17 +146,42 @@ function notifyDirectMessagesOnline(loggedUser) {
 
         if (newMessages !== null && newMessages.length !== 0) {
 //            localStorage.putObjectInLocalStorage('lastMessageSeenOnApp', newMessages[0]["id"]);
-            for (var i = newMessages.length - 1; i >= 0; i--) {
-                if (newMessages[i]["sender_screen_name"] !== loggedUser["alias"] && lastMessageID !== newMessages[i]["id"]) {
-                    $("#directMessages").prepend(getRenderedMessage(newMessages[i]));
-                    if ($("#circle").text() === "") {
-                        $("#circle").text("1");
+            for (var i = newMessages.length - 1; i >= 0; i--) {//doar niste paranteze, asa merge vad
+                if ((newMessages[i]["sender_screen_name"] !== loggedUser["alias"]) && (lastMessageID !== newMessages[i]["id"])) {
+                    if (lastMessageID !== null) {
+                        $("#directMessages").prepend(getRenderedMessage(newMessages[i]));
+                        if ($("#circle").text() === "") {
+                            $("#circle").text("1");
+                        } else {
+                            var nr = parseInt($("#circle").text());
+                            var b = nr + 1;
+                            $("#circle").text(b);
+                        }
+                        localStorage.putObjectInLocalStorage('lastDownloadedMessage', newMessages[i]["id"]);
                     } else {
-                        var nr = parseInt($("#circle").text());
-                        var b = nr + 1;
-                        $("#circle").text(b);
+                        var lastLogout = localStorage.getObjectGromLocalStorage('lastLogout');
+                        var lastUnloadPage = localStorage.getObjectGromLocalStorage('closeTab');
+                        var lastSeen = localStorage.getObjectGromLocalStorage('lastSeen');
+                        var logoutDate = new Date(lastLogout);
+                        var closeTabDate = new Date(lastUnloadPage);
+                        var lastSeenDate = new Date(lastSeen);
+
+                        var lastOut = logoutDate.getTime() < closeTabDate.getTime() ? closeTabDate : logoutDate;
+                        lastOut = lastOut.getTime() < lastSeenDate.getTime() ? lastOut : lastSeenDate;
+
+                        if (lastOut.getTime() < new Date(newMessages[i]["created_at"]).getTime()) {
+                            $("#directMessages").prepend(getRenderedMessage(newMessages[i]));
+                            if ($("#circle").text() === "") {
+                                $("#circle").text("1");
+                            } else {
+                                var nr = parseInt($("#circle").text());
+                                var b = nr + 1;
+                                $("#circle").text(b);
+                            }
+                            localStorage.putObjectInLocalStorage('lastDownloadedMessage', newMessages[i]["id"]);
+                        }
                     }
-                }
+            }
             }
         }
 

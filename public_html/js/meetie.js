@@ -30,7 +30,7 @@ meetie.GooglePlusServiceModel.GoogleService.prototype = {
     getOauthResult: function () {
         return this.oauthResult;
     },
-    loginGoogle: function(){
+    loginGoogle: function () {
         OAuth.popup('google_plus', {cache: true}).done(function (googlePlus) {
             googlePlus.me().done(function (data) {
                 console.log(data);
@@ -56,11 +56,14 @@ meetie.GooglePlusServiceModel.GoogleService.prototype = {
             alert("Google authentication failed. Cannot provide results from Google. Please try again.");
         });
     },
-    logoutGoogle: function(){
+    logoutGoogle: function () {
+        //gata, poti sa-l testezi please? ai oroarea noooooooo please uai? sa-l stric? :ok)i0 fac eu
         OAuth.clearCache('google_plus');
+        var lastSeen = localStorage.getObjectGromLocalStorage('lastSeen');
         localStorage.clear();
         localStorage.putObjectInLocalStorage('lastLogout', getCurrentDateTime());
-        window.location.href = "index.html"; 
+        localStorage.putObjectInLocalStorage('lastSeen', lastSeen);
+        window.location.href = "index.html";
     }
 
 };
@@ -183,9 +186,10 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
     },
     logoutTwitter: function () {
         OAuth.clearCache('twitter');
+        var lastSeen = localStorage.getObjectGromLocalStorage('lastSeen');
         localStorage.clear();
         localStorage.putObjectInLocalStorage('lastLogout', getCurrentDateTime());
-        console.log(" logout " + getCurrentDateTime());
+        localStorage.putObjectInLocalStorage('lastSeen', lastSeen);
         window.location.href = "index.html";
 
     },
@@ -202,7 +206,7 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
                 twitterService.getUserTweets(data["id"]);
 
                 window.setTimeout(function () {
-                     window.location.href = "mainPage.html";
+                    window.location.href = "mainPage.html";
                 }, 1000);
             }).fail(function (err) {
                 console.log(err);
@@ -231,7 +235,7 @@ function authorizeAndInitializeService() {
     var twitter = OAuth.create('twitter');
     var googlePlus = OAuth.create('google_plus');
     return {'twitter': twitter, 'twitterService': new meetie.TwitterServiceModel.TwitterService(twitter),
-            'google_plus': googlePlus,  'googleService': new meetie.GooglePlusServiceModel.GoogleService(googlePlus)};
+        'google_plus': googlePlus, 'googleService': new meetie.GooglePlusServiceModel.GoogleService(googlePlus)};
 }
 
 function parseList(list) {
