@@ -225,7 +225,7 @@ var Controller = {
             twitterService = authorizeAndInitializeService().twitterService;
             var status = "[New Invite] " + title + " Where : " + location + " When: " + dates + " With: ";
             for (var i = 0; i < ivitedPeople.length; i++) {
-                status += "@" + ivitedPeople[i];
+                status += "@" + ivitedPeople[i]+" ";
             }
             twitterService.postMessage(status);
 
