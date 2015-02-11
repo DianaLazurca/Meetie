@@ -2,13 +2,13 @@
 
 
 var Controller = {
-    user: "e",
+    user: 'cev',
     meetigforsort: [],
     setDate: function () {
 
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
+        var mm = today.getMonth() + 1; 
         var yyyy = today.getFullYear();
 
         if (dd < 10) {
@@ -150,26 +150,23 @@ var Controller = {
         },
         search: function () {
             var txt = document.getElementById("inp_guests").value;
-            
-            
+
             var followersList = localStorage.getObjectGromLocalStorage('followersList');
             var loggedUser = localStorage.getObjectGromLocalStorage('loggedinUser');
             parseList(followersList);
             var user = initializeUser(loggedUser["id"], loggedUser["screen_name"],
                     loggedUser["name"], loggedUser["alias"],
                     loggedUser["avatar"], null, followersList);
-            
+
             var followers = new Array(user.getFollowers()["users"]);
-            console.log();
-            for( var i = 0; i < followers[0].length; i++){
+            for (var i = 0; i < followers[0].length; i++) {
                 console.log(followers[0][i]);
-                if( followers[0][i]["screen_name"] === txt){
+                if (followers[0][i]["screen_name"] === txt) {
                     var html = "<div class=\"desc\"><div class=\"details\"><a href=\"" + txt + "\">" + txt + "</a></div></div>";
-                    document.getElementById("search-resuts").innerHTML += html; 
+                    document.getElementById("search-resuts").innerHTML += html;
                 }
-                
+
             }
-            
         },
         form_reset: function () {
 
@@ -224,7 +221,9 @@ var Controller = {
             var g = ",";
             g += gsts;
             g += ",";
-
+            
+            
+            
             $.ajax({
                 url: "http://localhost:8383/meetings",
                 type: "POST",
@@ -241,6 +240,7 @@ var Controller = {
                 },
                 success: function (data) {
                     Controller.Compose.sendInvites(data.id, data.guests);
+                    
                 },
                 error: function () {
                     console.warn("Error: sending data for a new meeting.");
@@ -409,7 +409,7 @@ var Controller = {
         },
         //pentru fiecare invitatie ia informatiile ce descriu intalnirea si le afiseaza
         loadActualInvites: function (invs) {
-
+            var count = 0;
             invs.forEach(function (inv) {
 
                 $.ajax({
@@ -430,6 +430,7 @@ var Controller = {
                             html += "<div class=\"form-group\"><button class=\"btn btn-default\" data-meeting-id = \"" + inv.id + "\">Send Response</button></div></div></div>";
 
                             document.getElementById("Invites").innerHTML += html;
+                            count = 1;
                         }
                     },
                     error: function () {
@@ -438,6 +439,9 @@ var Controller = {
                 });
 
             });
+            if (count === 0) {
+                document.getElementById("Invites").innerHTML = "<div class=\"row\"><div class=\"col-lg-12 ds form-panel\">You didn't receive any new invitations.</div></div>";
+            }
         }
 
     }

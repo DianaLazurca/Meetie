@@ -203,7 +203,6 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
                 twitterService.getUserMentions(data["id"]);
                 twitterService.getUserDirectMessages(data["id"]);
                 twitterService.getUserTweets(data["id"]);
-
                 window.setTimeout(function () {
                     window.location.href = "mainPage.html";
                 }, 1000);

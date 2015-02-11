@@ -8,6 +8,7 @@ $(document).ready(function () {
             var friendsList = localStorage.getObjectGromLocalStorage('friendsList');
             var followersList = localStorage.getObjectGromLocalStorage('followersList');
             var loggedUser = localStorage.getObjectGromLocalStorage('loggedinUser');
+            
             parseList(friendsList);
             parseList(followersList);
             var user = initializeUser(loggedUser["id"], loggedUser["screen_name"],
