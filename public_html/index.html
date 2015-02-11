@@ -133,14 +133,7 @@ and open the template in the editor.
                     
                     if( googlePlus !== false){
                         googlePlus.me().done(function(data) {
-                        //console.log(data);
                         window.location.href = "mainPage.html";
-//                        twitterService.getUserDirectMessages(data["id"]);
-//                        twitterService.getUserMentions(data["id"]);
-//                        twitterService.getUserTweets(data["id"]);
-//                        window.setTimeout(function () {
-//                             window.location.href = "mainPage3.html";
-//                         }, 1000);
                     }).fail(function(err){
                         console.log(err);
                     });

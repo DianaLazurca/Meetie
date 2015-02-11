@@ -190,15 +190,17 @@ function notifyMentions() {
     var logoutDate = new Date(lastLogout);
     var closeTabDate = new Date(lastUnloadPage);
     var lastOut = logoutDate.getTime() < closeTabDate.getTime() ? closeTabDate : logoutDate;
+    if (mentions !== null && mentions.length !== 0) {
+        for (var i = mentions.length - 1; i >= 0; i--) {
+            if (lastOut.getTime() < new Date(mentions[i]["created_at"]).getTime()) {
+                var format = localStorage.getObjectGromLocalStorage('format' + mentions[i]["id_str"]);
+                localStorage.removeItem('format' + mentions[i]["id_str"]);
+                $("#mentions").prepend(format["html"]);
+            }
 
-    for (var i = 0; i < mentions.length; i++) {
-        if (lastOut.getTime() < new Date(mentions[i]["created_at"]).getTime()) {
-            var format = localStorage.getObjectGromLocalStorage('format' + mentions[i]["id_str"]);
-            localStorage.removeItem('format' + mentions[i]["id_str"]);
-            $("#mentions").append(format["html"]);
         }
-
     }
+
 
 }
 
@@ -207,16 +209,20 @@ function notifyMentionsOnline() {
     window.setTimeout(function () {
         var newMentions = localStorage.getObjectGromLocalStorage('mentionsListGreater');
         if (newMentions !== null && newMentions.length !== 0) {
-            for (var i = 0; i < newMentions.length; i++) {
-                var format = localStorage.getObjectGromLocalStorage('format' + newMentions[i]["id_str"]);
-                localStorage.removeItem('format' + newMentions[i]["id_str"]);
-                $("#mentions").append(format["html"]);
+            for (var i = newMentions.length - 1; i >= 0; i--) {
+                    var format = localStorage.getObjectGromLocalStorage('format' + newMentions[i]["id_str"]);
+                    localStorage.removeItem('format' + newMentions[i]["id_str"]);
+                    $("#mentions").prepend(format["html"]);
+
+
             }
         }
 
     }, 2000);
 
 }
+
+
 
 function setUpdateInterval(notifyDirectMessagesOnline, loggedUser, prepareTweetsOnline, twitterService, notifyMentionsOnline) {
     setInterval(function () {
