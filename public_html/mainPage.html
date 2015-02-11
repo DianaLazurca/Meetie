@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Meetie - Control Panel</title>
+        <title>Principala</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -159,12 +159,15 @@
                 </ul>
                 <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav side-nav">
-                        <li class="active">
-                            <a href="mainPage.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="mainPage.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="host.html"><i class="fa fa-fw fa-calendar"></i> Meetings</a>
+                        <a href="invites.html"><i class="fa fa-fw fa-envelope"></i> Invitations</a>
+                        <a href="compose.html"><i class="fa fa-fw fa-dashboard"></i> Compose</a>
+                    </li>
+                </ul>
+            </div>
                 <!-- /.navbar-collapse -->
             </nav>
 
@@ -230,7 +233,7 @@
                                             <th>Availability</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="table-body">
                                         <tr class="success">
                                             <td>1</td>
                                             <td>Întâlnirea 1</td>

@@ -1,5 +1,5 @@
-
-$(document).ready(function () {
+$( this ).load(function() {
+           
     var twitter = authorizeAndInitializeService().twitter;
     var googlePlus = authorizeAndInitializeService().google_plus;
     if (twitter !== false) {
@@ -22,15 +22,12 @@ $(document).ready(function () {
             $("#image").attr("src", user.getPicture());
             var twitterService = authorizeAndInitializeService().twitterService;
             twitterService.getUserDirectMessages(loggedUser["id"]);
-            prepareTweets(twitterService);
             
             window.setTimeout(function () {
-                notifyMentions();
                 notifyDirectMessages(loggedUser);
-            }, 2000);
+            }, 5000);
         }, 2000);
-        setUpdateInterval(notifyDirectMessagesOnline, localStorage.getObjectGromLocalStorage('loggedinUser'), prepareTweetsOnline,
-                authorizeAndInitializeService().twitterService, notifyMentionsOnline);
+        setUpdateInterval(notifyDirectMessagesOnline, localStorage.getObjectGromLocalStorage('loggedinUser'));
     } else {
         if (googlePlus !== false) {
             $("#name").append('Sunt o smechera si m-am logat cu Google PLus');
@@ -188,82 +185,81 @@ function notifyDirectMessagesOnline(loggedUser) {
     }, 2000);
 
 }
-function prepareTweets(twitterService) {
-    var mentions = localStorage.getObjectGromLocalStorage('mentionsList');
+//function prepareTweets(twitterService) {
+//    var mentions = localStorage.getObjectGromLocalStorage('mentionsList');
+//
+//    if (mentions !== null && mentions.length !== 0) {
+//        localStorage.putObjectInLocalStorage('lastMention', mentions[0]["id_str"]);
+//        for (var i = 0; i < mentions.length; i++) {
+//            twitterService.displayTwitterFormat(mentions[i]["id_str"]);
+//        }
+//    }
+//
+//}
 
-    if (mentions !== null && mentions.length !== 0) {
-        localStorage.putObjectInLocalStorage('lastMention', mentions[0]["id_str"]);
-        for (var i = 0; i < mentions.length; i++) {
-            twitterService.displayTwitterFormat(mentions[i]["id_str"]);
-        }
-    }
-
-}
-
-function prepareTweetsOnline(twitterService) {
-    var lastMentionFromUser = localStorage.getObjectGromLocalStorage('lastMention');
-
-    twitterService.getUserMentionsGreaterThanId(lastMentionFromUser);
-
-    window.setTimeout(function () {
-        var newMentions = localStorage.getObjectGromLocalStorage('mentionsListGreater');
-        if (newMentions !== null && newMentions.length !== 0) {
-            localStorage.putObjectInLocalStorage('lastMention', newMentions[0]["id_str"]);
-            for (var i = 0; i < newMentions.length; i++) {
-                twitterService.displayTwitterFormat(newMentions[i]["id_str"]);
-            }
-        }
-    }, 2000);
-
-}
-function notifyMentions() {
-    var mentions = localStorage.getObjectGromLocalStorage('mentionsList');
-    var lastLogout = localStorage.getObjectGromLocalStorage('lastLogout');
-    var lastUnloadPage = localStorage.getObjectGromLocalStorage('closeTab');
-    var logoutDate = new Date(lastLogout);
-    var closeTabDate = new Date(lastUnloadPage);
-    var lastOut = logoutDate.getTime() < closeTabDate.getTime() ? closeTabDate : logoutDate;
-    if (mentions !== null && mentions.length !== 0) {
-        for (var i = mentions.length - 1; i >= 0; i--) {
-            if (lastOut.getTime() < new Date(mentions[i]["created_at"]).getTime()) {
-                var format = localStorage.getObjectGromLocalStorage('format' + mentions[i]["id_str"]);
-                localStorage.removeItem('format' + mentions[i]["id_str"]);
-                $("#mentions").prepend(format["html"]);
-            }
-
-        }
-    }
-
-
-}
-
-function notifyMentionsOnline() {
-
-    window.setTimeout(function () {
-        var newMentions = localStorage.getObjectGromLocalStorage('mentionsListGreater');
-        if (newMentions !== null && newMentions.length !== 0) {
-            for (var i = newMentions.length - 1; i >= 0; i--) {
-                    var format = localStorage.getObjectGromLocalStorage('format' + newMentions[i]["id_str"]);
-                    localStorage.removeItem('format' + newMentions[i]["id_str"]);
-                    $("#mentions").prepend(format["html"]);
-
-
-            }
-        }
-
-    }, 2000);
-
-}
+//function prepareTweetsOnline(twitterService) {
+//    var lastMentionFromUser = localStorage.getObjectGromLocalStorage('lastMention');
+//
+//    twitterService.getUserMentionsGreaterThanId(lastMentionFromUser);
+//
+//    window.setTimeout(function () {
+//        var newMentions = localStorage.getObjectGromLocalStorage('mentionsListGreater');
+//        if (newMentions !== null && newMentions.length !== 0) {
+//            localStorage.putObjectInLocalStorage('lastMention', newMentions[0]["id_str"]);
+//            for (var i = 0; i < newMentions.length; i++) {
+//                twitterService.displayTwitterFormat(newMentions[i]["id_str"]);
+//            }
+//        }
+//    }, 2000);
+//
+//}
+//function notifyMentions() {
+//    var mentions = localStorage.getObjectGromLocalStorage('mentionsList');
+//    var lastLogout = localStorage.getObjectGromLocalStorage('lastLogout');
+//    var lastUnloadPage = localStorage.getObjectGromLocalStorage('closeTab');
+//    var logoutDate = new Date(lastLogout);
+//    var closeTabDate = new Date(lastUnloadPage);
+//    var lastOut = logoutDate.getTime() < closeTabDate.getTime() ? closeTabDate : logoutDate;
+//    if (mentions !== null && mentions.length !== 0) {
+//        for (var i = mentions.length - 1; i >= 0; i--) {
+//            if (lastOut.getTime() < new Date(mentions[i]["created_at"]).getTime()) {
+//                var format = localStorage.getObjectGromLocalStorage('format' + mentions[i]["id_str"]);
+//                localStorage.removeItem('format' + mentions[i]["id_str"]);
+//                $("#mentions").prepend(format["html"]);
+//            }
+//
+//        }
+//    }
+//
+//
+//}
+//
+//function notifyMentionsOnline() {
+//
+//    window.setTimeout(function () {
+//        var newMentions = localStorage.getObjectGromLocalStorage('mentionsListGreater');
+//        if (newMentions !== null && newMentions.length !== 0) {
+//            for (var i = newMentions.length - 1; i >= 0; i--) {
+//                    var format = localStorage.getObjectGromLocalStorage('format' + newMentions[i]["id_str"]);
+//                    localStorage.removeItem('format' + newMentions[i]["id_str"]);
+//                    $("#mentions").prepend(format["html"]);
+//
+//
+//            }
+//        }
+//
+//    }, 2000);
+//
+//}
 
 
 
-function setUpdateInterval(notifyDirectMessagesOnline, loggedUser, prepareTweetsOnline, twitterService, notifyMentionsOnline) {
+function setUpdateInterval(notifyDirectMessagesOnline, loggedUser) {
     setInterval(function () {
         notifyDirectMessagesOnline(loggedUser);
-        prepareTweetsOnline(twitterService);
-        window.setTimeout(function () {
-            notifyMentionsOnline();
-        }, 2000);
 
     }, 60000);
 }
+
+
+
