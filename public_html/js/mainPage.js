@@ -227,7 +227,7 @@ function notifyMentions() {
         for (var i = mentions.length - 1; i >= 0; i--) {
             if (lastOut.getTime() < new Date(mentions[i]["created_at"]).getTime()) {
                 var format = localStorage.getObjectGromLocalStorage('format' + mentions[i]["id_str"]);
-                localStorage.removeItem('format' + mentions[i]["id_str"]);
+                localStorage.removeItem('format' + mentions[i]["id_str"]);                
                 $("#mentions").prepend(format["html"]);
             }
 

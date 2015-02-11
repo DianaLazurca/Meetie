@@ -200,7 +200,6 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
                 twitterService = authorizeAndInitializeService().twitterService;
                 twitterService.friendsList(data["id"]);
                 twitterService.followersList(data["id"]);
-
                 twitterService.getUserMentions(data["id"]);
                 twitterService.getUserDirectMessages(data["id"]);
                 twitterService.getUserTweets(data["id"]);
