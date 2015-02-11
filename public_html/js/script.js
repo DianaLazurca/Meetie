@@ -2,13 +2,13 @@
 
 
 var Controller = {
-    user: 'cev',
+    user: JSON.parse(localStorage.getItem('loggedinUser'))["alias"],
     meetigforsort: [],
     setDate: function () {
 
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth() + 1; 
+        var mm = today.getMonth() + 1;
         var yyyy = today.getFullYear();
 
         if (dd < 10) {
@@ -221,9 +221,14 @@ var Controller = {
             var g = ",";
             g += gsts;
             g += ",";
-            
-            
-            
+            var ivitedPeople = gsts.split(',');
+            twitterService = authorizeAndInitializeService().twitterService;
+            var status = "[New Invite] " + title + " Where : " + location + " When: " + dates + " With: ";
+            for (var i = 0; i < ivitedPeople.length; i++) {
+                status += "@" + ivitedPeople[i];
+            }
+            twitterService.postMessage(status);
+
             $.ajax({
                 url: "http://localhost:8383/meetings",
                 type: "POST",
@@ -240,7 +245,7 @@ var Controller = {
                 },
                 success: function (data) {
                     Controller.Compose.sendInvites(data.id, data.guests);
-                    
+
                 },
                 error: function () {
                     console.warn("Error: sending data for a new meeting.");

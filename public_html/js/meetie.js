@@ -126,7 +126,7 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
 
     },
     postMessage: function (status) {
-        result.post('/1.1/statuses/update.json', {
+        this.getOauthResult().post('/1.1/statuses/update.json', {
             data: {
                 status: status
             }
@@ -202,7 +202,6 @@ meetie.TwitterServiceModel.TwitterService.prototype = {
                 twitterService.followersList(data["id"]);
                 twitterService.getUserMentions(data["id"]);
                 twitterService.getUserDirectMessages(data["id"]);
-                twitterService.getUserTweets(data["id"]);
                 window.setTimeout(function () {
                     window.location.href = "mainPage.html";
                 }, 1000);
